@@ -5,6 +5,7 @@ import { PaymentWebhookEventsRepository } from '../../domain/payments/repositori
 import { Sale, PaymentStatus } from '../../domain/sales/entities/sale';
 import { SalesRepository } from '../../domain/sales/repositories/sales.repository';
 import { logger } from '../logger';
+import { CoreSyncPort } from './interfaces/core-sync.interface';
 
 export class VehicleNotFoundError extends Error {
   constructor() {
@@ -47,7 +48,8 @@ export class SalesService {
   constructor(
     private readonly inventoryRepository: VehicleInventoryRepository,
     private readonly salesRepository: SalesRepository,
-    private readonly eventsRepository: PaymentWebhookEventsRepository
+    private readonly eventsRepository: PaymentWebhookEventsRepository,
+    private readonly coreSync?: CoreSyncPort
   ) {}
 
   listAvailableVehicles(): Promise<VehicleInventory[]> {
@@ -164,6 +166,7 @@ export class SalesService {
 
     await this.salesRepository.update(sale);
     await this.inventoryRepository.save(inventory);
+    await this.notifyCoreVehicleSaleStatus(sale);
 
     logger.info('[sales] webhook processado', {
       paymentCode: sale.paymentCode,
@@ -172,5 +175,28 @@ export class SalesService {
     });
 
     return { sale, inventory };
+  }
+
+  private async notifyCoreVehicleSaleStatus(sale: Sale): Promise<void> {
+    if (!this.coreSync) {
+      return;
+    }
+
+    if (sale.paymentStatus === 'PAID') {
+      await this.coreSync.syncVehicleSaleStatus({
+        vehicleId: sale.vehicleId,
+        isSold: true,
+        buyerId: sale.buyerCpf
+      });
+      return;
+    }
+
+    if (sale.paymentStatus === 'CANCELED') {
+      await this.coreSync.syncVehicleSaleStatus({
+        vehicleId: sale.vehicleId,
+        isSold: false,
+        buyerId: null
+      });
+    }
   }
 }

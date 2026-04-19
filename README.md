@@ -28,9 +28,12 @@ Monte um `.env` com:
 ```env
 PORT=4000
 INTERNAL_SYNC_TOKEN=local-sync-token
+CORE_SERVICE_URL=http://core:3000/api
+CORE_SERVICE_TOKEN=local-sync-token
 ```
 
 `INTERNAL_SYNC_TOKEN` protege os endpoints internos consumidos pelo Core. Configure o mesmo valor em `vehicle-platform` (`SALES_SERVICE_TOKEN`).
+`CORE_SERVICE_URL` e `CORE_SERVICE_TOKEN` permitem devolver ao Core o status final da venda (`isSold` e comprador) após o webhook.
 
 ## Endpoints principais
 
@@ -122,6 +125,7 @@ A API expõe os recursos em `/api` (com exceção do healthcheck).
 4. O provedor de pagamento envia o webhook para `/sales/payments/webhook`.
    - `PAID` → venda é marcada como `PAID` e o inventário vira `SOLD`.
    - `CANCELED` → venda vira `CANCELED` e o inventário volta para `AVAILABLE`.
+5. Após `PAID`/`CANCELED`, o Sales notifica o Core em `/api/internal/vehicles/:id/sale-status`.
 
 ## Testes
 
