@@ -19,6 +19,14 @@ app.get("/api", (_req, res) => {
   });
 });
 
+app.get("/", (_req, res) => {
+  res.json({
+    app: appName,
+    message: "Sales API em execução",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.get("/health", (_req, res) => {
   res.json({
     app: appName,
