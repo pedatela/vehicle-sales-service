@@ -1,0 +1,30 @@
+{
+  "name": "vehicle-sales-service",
+  "version": "1.0.0",
+  "description": "Serviço de vendas e inventário da plataforma de veículos",
+  "main": "dist/server.js",
+  "scripts": {
+    "lint": "tsc --noEmit --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^20.11.30",
+    "@vitest/coverage-v8": "^1.6.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "zod": "^4.3.6"
+  }
+}
