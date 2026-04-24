@@ -6,6 +6,7 @@ import { SaleResponse, VehicleResponse } from '../interfaces';
 import { Sale } from '../../../domain/sales/entities/sale';
 import { VehicleInventory } from '../../../domain/inventory/entities/vehicle-inventory';
 import { createSaleSchema, paymentWebhookSchema } from '../validation/sales.schema';
+import { AuthenticatedRequest } from '../interfaces/auth.interface';
 
 const salesService = createSalesService();
 
@@ -13,10 +14,14 @@ const toSaleResponse = (sale: Sale): SaleResponse => sale.toJSON() as SaleRespon
 const toVehicleResponse = (vehicle: VehicleInventory): VehicleResponse =>
   vehicle.toJSON() as VehicleResponse;
 
-export const createSale = async (req: Request, res: Response) => {
+export const createSale = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const payload = createSaleSchema.parse(req.body ?? {});
-    const { sale, inventory } = await salesService.createSale(payload);
+    const { sale, inventory } = await salesService.createSale({
+      ...payload,
+      buyerEmail: req.user?.email ?? null,
+      buyerName: req.user?.name ?? null
+    });
 
     return res.status(201).json({
       sale: toSaleResponse(sale),

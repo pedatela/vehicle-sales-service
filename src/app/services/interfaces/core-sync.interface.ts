@@ -2,6 +2,8 @@ export type CoreVehicleSaleStatusPayload = {
   vehicleId: string;
   isSold: boolean;
   buyerId: string | null;
+  buyerEmail?: string | null;
+  buyerName?: string | null;
 };
 
 export type CoreSyncClientOptions = {

@@ -44,7 +44,9 @@ export class HttpCoreSyncClient implements CoreSyncPort {
         headers,
         body: JSON.stringify({
           isSold: payload.isSold,
-          buyerId: payload.buyerId
+          buyerId: payload.buyerId,
+          buyerEmail: payload.buyerEmail ?? null,
+          buyerName: payload.buyerName ?? null
         })
       });
 

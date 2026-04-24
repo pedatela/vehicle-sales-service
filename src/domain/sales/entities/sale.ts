@@ -5,6 +5,8 @@ export type PaymentStatus = 'PENDING' | 'PAID' | 'CANCELED';
 export type SaleAttributes = {
   vehicleId: string;
   buyerCpf: string;
+  buyerEmail?: string | null;
+  buyerName?: string | null;
   totalAmount: number;
   paymentCode?: string;
   paymentStatus?: PaymentStatus;
@@ -32,6 +34,8 @@ export class Sale {
 
     const props: SaleProps = {
       ...attrs,
+      buyerEmail: attrs.buyerEmail ?? null,
+      buyerName: attrs.buyerName ?? null,
       paymentCode: attrs.paymentCode ?? randomUUID(),
       paymentStatus: attrs.paymentStatus ?? 'PENDING',
       saleDate: attrs.saleDate ?? null,
@@ -70,6 +74,14 @@ export class Sale {
     return this.props.buyerCpf;
   }
 
+  get buyerEmail(): string | null {
+    return this.props.buyerEmail ?? null;
+  }
+
+  get buyerName(): string | null {
+    return this.props.buyerName ?? null;
+  }
+
   get createdAt(): Date {
     return this.props.createdAt;
   }
@@ -98,6 +110,8 @@ export class Sale {
       id: this.id,
       vehicleId: this.vehicleId,
       buyerCpf: this.buyerCpf,
+      buyerEmail: this.buyerEmail,
+      buyerName: this.buyerName,
       totalAmount: this.totalAmount,
       paymentCode: this.paymentCode,
       paymentStatus: this.paymentStatus,

@@ -72,7 +72,9 @@ describe('SalesService', () => {
     expect(syncVehicleSaleStatusMock).toHaveBeenCalledWith({
       vehicleId: 'vehicle-1',
       isSold: true,
-      buyerId: '12345678901'
+      buyerId: '12345678901',
+      buyerEmail: null,
+      buyerName: null
     });
   });
 
@@ -92,7 +94,9 @@ describe('SalesService', () => {
     expect(syncVehicleSaleStatusMock).toHaveBeenCalledWith({
       vehicleId: 'vehicle-1',
       isSold: false,
-      buyerId: null
+      buyerId: null,
+      buyerEmail: null,
+      buyerName: null
     });
   });
 });

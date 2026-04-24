@@ -30,10 +30,16 @@ PORT=4000
 INTERNAL_SYNC_TOKEN=local-sync-token
 CORE_SERVICE_URL=http://core:3000/api
 CORE_SERVICE_TOKEN=local-sync-token
+COGNITO_REGION=us-east-1
+COGNITO_USER_POOL_ID=us-east-1_xxxxxxxx
+COGNITO_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
+# opcional, se quiser sobrescrever o issuer derivado:
+# COGNITO_ISSUER=https://cognito-idp.us-east-1.amazonaws.com/us-east-1_xxxxxxxx
 ```
 
 `INTERNAL_SYNC_TOKEN` protege os endpoints internos consumidos pelo Core. Configure o mesmo valor em `vehicle-platform` (`SALES_SERVICE_TOKEN`).
 `CORE_SERVICE_URL` e `CORE_SERVICE_TOKEN` permitem devolver ao Core o status final da venda (`isSold` e comprador) após o webhook.
+`COGNITO_USER_POOL_ID` + `COGNITO_CLIENT_ID` (ou `COGNITO_ISSUER`) habilitam o middleware JWT Cognito no `POST /api/sales`.
 
 ## Endpoints principais
 
@@ -52,7 +58,7 @@ A API expõe os recursos em `/api` (com exceção do healthcheck).
 | ------ | ------------------------- | ----------------------------------------------------- |
 | GET    | `/vehicles/available`     | Lista veículos disponíveis (status `AVAILABLE`).      |
 | GET    | `/vehicles/sold`          | Lista veículos vendidos (`SOLD`).                     |
-| POST   | `/sales`                  | Inicia uma venda (`vehicleId`, `buyerCpf`).           |
+| POST   | `/sales`                  | Inicia uma venda (`vehicleId`, `buyerCpf`) com `Authorization: Bearer <token>`. |
 | POST   | `/sales/payments/webhook` | Recebe notificações de pagamento (`PAID`/`CANCELED`). |
 
 ### Internos (`x-internal-token`)

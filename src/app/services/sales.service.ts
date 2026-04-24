@@ -35,6 +35,8 @@ type VehicleSyncInput = {
 type CreateSaleInput = {
   vehicleId: string;
   buyerCpf: string;
+  buyerEmail?: string | null | undefined;
+  buyerName?: string | null | undefined;
   totalAmount?: number | undefined;
 };
 
@@ -116,6 +118,8 @@ export class SalesService {
     const sale = Sale.create({
       vehicleId: vehicle.vehicleId,
       buyerCpf: input.buyerCpf,
+      buyerEmail: input.buyerEmail ?? null,
+      buyerName: input.buyerName ?? null,
       totalAmount: input.totalAmount ?? vehicle.price
     });
 
@@ -186,7 +190,9 @@ export class SalesService {
       await this.coreSync.syncVehicleSaleStatus({
         vehicleId: sale.vehicleId,
         isSold: true,
-        buyerId: sale.buyerCpf
+        buyerId: sale.buyerCpf,
+        buyerEmail: sale.buyerEmail,
+        buyerName: sale.buyerName
       });
       return;
     }
@@ -195,7 +201,9 @@ export class SalesService {
       await this.coreSync.syncVehicleSaleStatus({
         vehicleId: sale.vehicleId,
         isSold: false,
-        buyerId: null
+        buyerId: null,
+        buyerEmail: null,
+        buyerName: null
       });
     }
   }
