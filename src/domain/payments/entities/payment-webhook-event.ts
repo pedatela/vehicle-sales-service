@@ -42,6 +42,10 @@ export class PaymentWebhookEvent {
     return this.props.processedAt;
   }
 
+  get payload(): Record<string, unknown> | null | undefined {
+    return this.props.payload;
+  }
+
   toJSON(): Record<string, unknown> {
     return {
       id: this.id,

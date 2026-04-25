@@ -33,6 +33,12 @@ CORE_SERVICE_TOKEN=local-sync-token
 COGNITO_REGION=us-east-1
 COGNITO_USER_POOL_ID=us-east-1_xxxxxxxx
 COGNITO_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
+DATABASE_HOST=localhost
+DATABASE_PORT=5434
+DATABASE_NAME=postechappsales
+DATABASE_USER=postechadmin
+DATABASE_PASSWORD=postechadmin
+DATABASE_SSL=false
 # opcional, se quiser sobrescrever o issuer derivado:
 # COGNITO_ISSUER=https://cognito-idp.us-east-1.amazonaws.com/us-east-1_xxxxxxxx
 ```
@@ -40,6 +46,7 @@ COGNITO_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
 `INTERNAL_SYNC_TOKEN` protege os endpoints internos consumidos pelo Core. Configure o mesmo valor em `vehicle-platform` (`SALES_SERVICE_TOKEN`).
 `CORE_SERVICE_URL` e `CORE_SERVICE_TOKEN` permitem devolver ao Core o status final da venda (`isSold` e comprador) após o webhook.
 `COGNITO_USER_POOL_ID` + `COGNITO_CLIENT_ID` (ou `COGNITO_ISSUER`) habilitam o middleware JWT Cognito no `POST /api/sales`.
+`DATABASE_*` habilita persistência em Postgres para inventário, vendas e eventos de webhook.
 
 ## Endpoints principais
 
